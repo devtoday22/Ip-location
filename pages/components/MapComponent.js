@@ -5,7 +5,7 @@ import L from "leaflet";
 
 // Fix for default marker icons in Leaflet
 const DefaultIcon = L.icon({
-  iconUrl: "http://localhost:3000/icon-location.svg",
+  iconUrl: "/icon-location.svg",
   iconSize: [30, 41],
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
