@@ -1,0 +1,65 @@
+.card {
+    background-color: white;
+    color: hsl(0, 0%, 17%);
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: row;
+    width: 60%;
+    gap: 8px;
+    margin-top: -85px;
+    padding: 30px;
+    position: relative;
+    z-index: 10;
+    
+  }
+  
+  .info {
+    text-align: center;
+  }
+  
+  .title {
+    font-size: 0.8rem;
+    color: hsl(0, 0%, 59%);
+    letter-spacing: 1.5px;
+    margin-bottom: 10px;
+  }
+  
+  .value {
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+  
+  .separator {
+    height: 50px;
+    width: 1px;
+    background-color: hsl(0, 0%, 59%);
+  }
+  
+  .loading, .error {
+    text-align: center;
+    font-size: 1.2rem;
+    color: hsl(0, 0%, 17%);
+  }
+  
+
+  @media (max-width: 768px) {
+    .card {
+     display: flex;
+     flex-direction: column;
+      margin-top: -240px;
+    }
+    .separator {
+      display: none;
+    }
+    .info {
+      padding-bottom: 20px;
+      border-bottom: 1px solid hsl(0, 0%, 59%);
+      margin-bottom: 20px;
+    }
+    .info:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+  }
