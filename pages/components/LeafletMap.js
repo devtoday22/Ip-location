@@ -1,43 +1,68 @@
-import React, { useEffect } from "react";
-import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
-import L from "leaflet";
+import React, { useEffect, useState } from "react";
+import styles from './Map.module.css'
 
-const DefaultIcon = L.icon({
-  iconUrl: "/icon-location.svg",
-  iconSize: [30, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  shadowUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png",
-  shadowSize: [41, 41],
-});
 
-const ChangeView = ({ center, zoom }) => {
-  const map = useMap();
-  useEffect(() => {
-    map.setView(center, zoom);
-  }, [center, zoom, map]);
-  return null;
-};
 
 const LeafletMap = ({ position, zoom }) => {
+  const [isClient, setIsClient] = useState(false);
+  const [MapContainer, setMapContainer] = useState(null);
+  const [TileLayer, setTileLayer] = useState(null);
+  const [Marker, setMarker] = useState(null);
+  const [Popup, setPopup] = useState(null);
+  const [L, setL] = useState(null);
+  const [defaultIcon, setDefaultIcon] = useState(null);
+  const [isMapReady, setIsMapReady] = useState(false);
+
   useEffect(() => {
-    L.Marker.prototype.options.icon = DefaultIcon;
+    setIsClient(true);
   }, []);
 
+  useEffect(() => {
+    if (isClient) {
+      import('leaflet').then((leaflet) => {
+        setL(leaflet);
+        import('react-leaflet').then((rl) => {
+          setMapContainer(rl.MapContainer);
+          setTileLayer(rl.TileLayer);
+          setMarker(rl.Marker);
+          setPopup(rl.Popup);
+          setIsMapReady(true);
+        });
+      });
+    }
+  }, [isClient]);
+
+  useEffect(() => {
+    if (isClient && L) {
+      setDefaultIcon(L.icon({
+        iconUrl: "/icon-location.svg",
+        iconSize: [30, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png",
+        shadowSize: [41, 41],
+      }));
+    }
+  }, [isClient, L]);
+
+  if (!isClient || !MapContainer || !TileLayer || !Marker || !L || !defaultIcon || !isMapReady) {
+    return null;
+  }
+
   return (
-    <MapContainer
-      center={position}
-      zoom={zoom}
-      scrollWheelZoom={true}
-      className="h-full w-full"
-    >
-      <ChangeView center={position} zoom={zoom} />
-      <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-      <Marker position={position}>
-        <Popup>Location</Popup>
-      </Marker>
-    </MapContainer>
+    <div className={styles.main}>
+      <MapContainer
+        center={position}
+        zoom={zoom}
+        scrollWheelZoom={true}
+        className={styles.full}
+      >
+<TileLayer url="https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png" />        
+<Marker position={position} icon={defaultIcon}>
+          <Popup>Location</Popup>
+        </Marker>
+      </MapContainer>
+    </div>
   );
 };
 
